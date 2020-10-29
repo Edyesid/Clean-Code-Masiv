@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class RouletteController {
     @Autowired
     RouletteService rouletteService;
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<?> createRoulette() {
+        return new ResponseEntity<>(rouletteService.createRoulette(),HttpStatus.CREATED);
+    }
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<?> getAllRoulettes() {
         return new ResponseEntity<>(rouletteService.getAllRoulettes(), HttpStatus.ACCEPTED);
