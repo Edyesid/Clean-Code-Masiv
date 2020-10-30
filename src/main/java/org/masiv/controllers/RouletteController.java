@@ -1,5 +1,6 @@
 package org.masiv.controllers;
 import org.masiv.Exceptions.RouletteException;
+import org.masiv.model.Bet;
 import org.masiv.services.RouletteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,17 @@ public class RouletteController {
             rouletteService.openRoulette(idRoulette);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch(RouletteException e) {
-            return new ResponseEntity<>("roulette not found.",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+        }
+    }
+    @RequestMapping(value="/bets/{idRoulette}", method = RequestMethod.POST)
+    public ResponseEntity<?> createBet(@PathVariable("idRoulette") String idRoulette, @RequestHeader("idUser") String idUser, @RequestBody Bet bet) {
+        try {
+            bet.setIdUser(idUser);
+            rouletteService.createBet(idRoulette,bet);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (RouletteException e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_ACCEPTABLE);
         }
     }
     @RequestMapping(method = RequestMethod.GET)

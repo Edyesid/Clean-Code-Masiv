@@ -1,5 +1,6 @@
 package org.masiv.services.impl;
 import org.masiv.Exceptions.RouletteException;
+import org.masiv.model.Bet;
 import org.masiv.model.Roulette;
 import org.masiv.persistence.RouletteRepository;
 import org.masiv.services.RouletteService;
@@ -27,5 +28,11 @@ public class RouletteServiceImpl implements RouletteService {
         ArrayList<Roulette> listRoulettes = new ArrayList<>();
         for (Roulette roulette: rouletteRepository.findAll()) listRoulettes.add(roulette);
         return listRoulettes;
+    }
+    @Override
+    public void createBet(String idRoulette, Bet bet) throws RouletteException {
+        Roulette roulette = rouletteRepository.findById(idRoulette).orElseThrow(()->new RouletteException(RouletteException.NOT_FOUND));
+        roulette.addBet(bet);
+        rouletteRepository.save(roulette);
     }
 }
